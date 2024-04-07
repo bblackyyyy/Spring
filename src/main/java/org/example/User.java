@@ -2,24 +2,30 @@
 
 package org.example;
 public class User {
-    private int age;
+    private String login;
+    private String password;
 
-    private char catagory;
 
-    public User(int age,  char catagory) {
-        this.age = age;
 
-        this.catagory = catagory;
+    public User(String email, String password) {
+        this.login = email;
+        this.password = password;
+
     }
 
-    public int getAge() {
-        return age;
+    public String getLogin() {
+        return login;
     }
 
-
-
-    public char getCatagory() {
-        return catagory;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
