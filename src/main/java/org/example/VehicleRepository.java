@@ -8,21 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.*;
-
-
+import java.util.stream.Collectors;
 
 class VehicleRepository implements IVehicleRepository {
     private List<Vehicle> vehicles;
     private String fileName = "vehicles.csv";
     private boolean modified;
+
     public VehicleRepository(String fileName) {
         this.fileName = fileName;
         this.vehicles = new ArrayList<>();
         this.modified = false;
         load();
     }
-
-
 
     @Override
     public void rentCar(String brand, String model) {
@@ -34,6 +32,31 @@ class VehicleRepository implements IVehicleRepository {
             }
         }
         System.out.println("Car " + brand + " " + model + " not available for rent.");
+    }
+
+    @Override
+    public void returnVehicle(Vehicle vehicle) {
+        for (Vehicle v : vehicles) {
+            if (v.equals(vehicle)) {
+                v.rented = false;
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void removeVehicle(Vehicle vehicle) {
+        vehicles.removeIf(v -> v.equals(vehicle));
+    }
+
+    @Override
+    public Vehicle getVehicle(String brand, String model) {
+        for (Vehicle v : vehicles) {
+            if (v.brand.equals(brand) && v.model.equals(model)) {
+                return v;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -53,10 +76,6 @@ class VehicleRepository implements IVehicleRepository {
         return vehicles;
     }
 
-
-
-
-
     public void printAvailableCars() {
         System.out.println("Available cars:");
         for (Vehicle vehicle : vehicles) {
@@ -65,7 +84,6 @@ class VehicleRepository implements IVehicleRepository {
             }
         }
     }
-
 
     @Override
     public void save() throws IOException {
@@ -87,8 +105,10 @@ class VehicleRepository implements IVehicleRepository {
         }
     }
 
-
-
+    @Override
+    public boolean vehicleExists(Vehicle vehicle) {
+        return vehicles.contains(vehicle);
+    }
 
     private void load() {
         try (Scanner scanner = new Scanner(new File(fileName))) {
